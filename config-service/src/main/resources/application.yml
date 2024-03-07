@@ -8,5 +8,5 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/vimal-prabhakaran/eureka-discovery-service-info.git
+          uri: https://github.com/DipRabadiya27/eureka-discovery-service-info
           clone-on-start: true
