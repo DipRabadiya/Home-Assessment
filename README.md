@@ -1,7 +1,6 @@
 # E-Commerce Backend System
 
 ## High - level Architecture:
-<img src="architecture.jpeg" width="800"/>
 
 
 ## Database Design
@@ -81,93 +80,6 @@
 - **Product** can have many **Offers** from different User type - **Sellers**
 - **Order** contains multiple **Order Items**, each linked to an **Offer**
 
-## Concurrency Handling
-
-### Product Management Service
-
-In our product management system, we handle concurrency using optimistic locking and versioning. This ensures that concurrent modifications to product and offer entities are detected and resolved appropriately.
-
-## Onboard Product Example
-
-Suppose seller-1 wants to onboard a new product named "Smartwatch" with an initial price of $200 and a quantity available of 50.
-
-### Steps:
-
-1. Begin a transaction to create the new product and offer.
-2. Check if the product already exists in the database.
-3. If the product exists, then some seller has already onboarded the same item (with same item name & description) and add a new offer record mapping this seller with price and inventory.
-4. If the product doesn't exist, create a new product entry and an associated offer within the same transaction.
-
-### Resultant Data Records:
-
-- **New Product**: 
-  - Name: Smartwatch
-  - Version: 1
-- **New Offer**:
-  - sellerId: seller-1
-  - Price: $200
-  - Quantity Available: 50
- 
-  
-Suppose seller-2 wants to onboard the same "Smartwatch" with an initial price of $180 and a quantity available of 100.
-- **New Product**: 
-  - Name: Smartwatch
-  - Version: 1
-- **Existing Offer**:
-  - Price: $200
-  - Quantity Available: 50
-- **New Offer**:
-  - Price: $180
-  - Quantity Available: 100
-  
-
-
-## Edit Product Example
-
-Let's consider selle-1 and seller-2 are editing the "Smartwatch" product concurrently:
-- seller-1 updates the price to $190 and increases the quantity available to 150.
-- seller-2 updates the price to $195 and increases the quantity available to 110.
-
-### Steps:
-
-1. Begin 2 concurrent transactions to retrieve the product and offer entities.
-2. Update the seller-1 's offer record to set price to $190 and quantity to 150 in txn-1 and similarly set the values to $195 and 110 in seller-2's offer.
-3. This avoids the conflicts as edit happens in 2 different offer records.
-
-### Resultant Data Records:
-
-- **New Product**: 
-  - Name: Smartwatch
-  - Version: 1
-- **Seller-1 's Offer**:
-  - Price: $190
-  - Quantity Available: 150
-- **Seller-2 's Offer**:
-  - Price: $195
-  - Quantity Available: 110
-
-## Delete Product Example
-
-Suppose if seller-1 wants to delete the "Smartwatch" product from his catalog
-
-### Steps:
-
-1. Begin a transaction to delete the product and its associated offer.
-2. If multiple offers are available for a product, delete the offer record alone.
-3. If there is only one offer available, delete both product and offer records.
-
-### Resultant Data Records:
-
-- **New Product**: 
-  - Name: Smartwatch
-  - Version: 1
-- **Seller-2 's Offer**:
-  - Price: $195
-  - Quantity Available: 110
-
-By following these steps and using optimistic locking, we ensure that concurrent modifications to products and offers are handled effectively in our system.
-Also, if a seller tries to edit product information (name/description) then we'll check if there are multiple offers for the same. 
-If there are multiple offers, we'll create a new Product entity with modified product details and map exisiting offer with new product.
 
 
 ## Service Details:
@@ -257,7 +169,7 @@ If there are multiple offers, we'll create a new Product entity with modified pr
 
 - Java 17 or above
 - Maven
-- Redis
+- Postman
 
 ### Steps
 
@@ -265,8 +177,8 @@ If there are multiple offers, we'll create a new Product entity with modified pr
 - Make sure the Redis instance is running locally at localhost:6379
 - Run the Discovery service and Config service first and then start other services (API gateway service, Auth Manager Service, Product Manager Service and Order Manager Service) in any order.
 - Register a new user / Login using existing test credentials.
-  - **Seller:** User Name : vimal Password: password1234
-  - **Buyer:** User Name : vijay Password: password1234
+  - **Seller:** User Name : dip Password: abcd1234
+  - **Buyer:** User Name : dip Password: abcd1234
 - Login and fetch the token value from the response.
 - Append the token value with 'Authorization' header key as part of the request.
 
@@ -276,30 +188,30 @@ If there are multiple offers, we'll create a new Product entity with modified pr
 
 ### POST User Registration:
 
-curl --location --request POST 'http://localhost:8080/api/v1/auth/register' \
+curl --location --request POST 'http://localhost:8082/api/v1/auth/register' \
 --header 'Content-Type: application/json' \
 --header 'Cookie: JSESSIONID=D7C782B20BA24F670C690C0F040B1AA9' \
 --data-raw '{
-    "email": "buyer1@sample.com",
-    "userName": "buyer1",
-    "password": "pass1234"
+    "email": "buyer@sample.com",
+    "userName": "buyer",
+    "password": "dip1234"
 }'
 
 
 ### POST User Login:
 
-curl --location --request POST 'http://localhost:8080/api/v1/auth/login' \
+curl --location --request POST 'http://localhost:8082/api/v1/auth/login' \
 --header 'Content-Type: application/json' \
 --header 'Cookie: JSESSIONID=D7C782B20BA24F670C690C0F040B1AA9' \
 --data-raw '{
-    "userName": "seller1",
-    "password": "pass1234"
+    "userName": "seller",
+    "password": "dip1234"
 }'
 
 
 ### POST Onboard Product (For Sellers) :
 
-curl --location --request POST 'http://localhost:8080/api/v1/seller/product' \
+curl --location --request POST 'http://localhost:8082/api/v1/seller/product' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: <JWT token>' \
 --data-raw '{
@@ -312,7 +224,7 @@ curl --location --request POST 'http://localhost:8080/api/v1/seller/product' \
 
 ### PUT Edit Product (For Sellers) :
 
-curl --location --request PUT 'http://localhost:8080/api/v1/seller/product' \
+curl --location --request PUT 'http://localhost:8082/api/v1/seller/product' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: <JWT token>' \
 --header 'Cookie: JSESSIONID=D7C782B20BA24F670C690C0F040B1AA9' \
@@ -332,26 +244,26 @@ curl --location --request DELETE 'http://localhost:8082/api/v1/seller/product?pr
 
 ### GET Product Catalog(For Sellers) (Paginated):
 
-curl --location --request GET 'http://localhost:8080/api/v1/seller/products?sellerId=23b270a5-045b-4523-8a03-a2e640e6d3a4&pageNo=0&pageSize=10' \
+curl --location --request GET 'http://localhost:8082/api/v1/seller/products?sellerId=23b270a5-045b-4523-8a03-a2e640e6d3a4&pageNo=0&pageSize=10' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: <JWT token>'
 
 ### GET Product Search (For Buyers - highlighting lowest seller offer) (Paginated):
 
-curl --location --request GET 'http://localhost:8080/api/v1/products/search?searchQuery=phone' \
+curl --location --request GET 'http://localhost:8082/api/v1/products/search?searchQuery=phone' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: <JWT token>'
 
 ### GET Product Search (For Buyers - highlighting lowest seller offer) (Paginated):
 
-curl --location --request GET 'http://localhost:8080/api/v1/products/search?searchQuery=phone' \
+curl --location --request GET 'http://localhost:8082/api/v1/products/search?searchQuery=phone' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: <JWT token>' \
 --header 'Cookie: JSESSIONID=D7C782B20BA24F670C690C0F040B1AA9'
 
 ### POST Place an order:
 
-curl --location --request POST 'http://localhost:8080/api/v1/order' \
+curl --location --request POST 'http://localhost:8084/api/v1/order' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: <JWT token>' \
 --data-raw '{
@@ -370,7 +282,7 @@ curl --location --request POST 'http://localhost:8080/api/v1/order' \
 
 ### PUT Cancel  Order (Order Item Wise):
 
-curl --location --request PUT 'http://localhost:8080/api/v1/order/29677691-3c1d-4698-ae8e-6b355b806c35/cancel' \
+curl --location --request PUT 'http://localhost:8084/api/v1/order/29677691-3c1d-4698-ae8e-6b355b806c35/cancel' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: <JWT token>' \
 --data-raw '{
@@ -380,58 +292,10 @@ curl --location --request PUT 'http://localhost:8080/api/v1/order/29677691-3c1d-
 
 ### GET Get all orders (For Sellers) (Order Item Wise) (Paginated):
 
-curl --location --request GET 'http://localhost:8080/api/v1/seller/orders' \
+curl --location --request GET 'http://localhost:8084/api/v1/seller/orders' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: <JWT token>' \
 --header 'Cookie: JSESSIONID=D7C782B20BA24F670C690C0F040B1AA9'
-
-## Steps to deploy in Google Kubernetes Engine
-
-# Microservices Deployment in Google Kubernetes Engine with Redis
-
-## Overview
-This document outlines the steps to deploy microservices in Google Kubernetes Engine (GKE) with Redis integration in API Gateway pods.
-
-## Steps for Deployment
-
-1. **Containerize Microservices:**
-   - Dockerize each microservice and push Docker images to Google Container Registry (GCR).
-
-2. **Set Up Redis:**
-   - Create a Redis instance in Google Cloud and ensure it is accessible from GKE cluster.
-
-3. **Configure Kubernetes Deployment Files:**
-   - Create Kubernetes deployment YAML files for each microservice.
-   - Configure environment variables, resource limits, and Redis connection settings in API Gateway deployment file.
-
-4. **Create Kubernetes Services:**
-   - Define Kubernetes service YAML files to expose microservices internally.
-   - Create a service to expose API Gateway externally.
-
-5. **Set Up Ingress Controller:**
-   - Deploy an Ingress Controller to manage external access to API Gateway.
-   - Configure routing rules to forward traffic to microservices.
-
-6. **Apply Kubernetes Resources:**
-   - Apply deployment and service files using `kubectl apply`.
-   - Monitor deployment progress using `kubectl get pods`.
-
-7. **Test Deployment:**
-   - Test accessibility of microservices and Redis from within the cluster.
-   - Use `kubectl port-forward` for testing individual services.
-
-8. **Set Up External Access:**
-   - Access API Gateway service externally using Ingress Controller's external IP.
-   - Test API endpoints and Redis integration.
-
-9. **Monitoring and Logging:**
-   - Configure monitoring and logging using Google Cloud Monitoring and Logging.
-   - Set up alerts for critical events.
-
-10. **Scaling and Maintenance:**
-    - Configure autoscaling for microservices.
-    - Perform routine maintenance tasks such as security updates and resource optimization.
-
 
 
 

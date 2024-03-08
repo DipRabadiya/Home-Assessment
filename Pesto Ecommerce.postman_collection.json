@@ -20,7 +20,7 @@
 					"raw": "{\n    \"productName\": \"iPhone 13 red 256GB\",\n    \"productDescription\": \"Lorem ipsum\",\n    \"availableInventory\": 50,\n    \"price\": 85000.00,\n    \"sellerId\": \"f5423841-7a8a-4044-a2d3-6f4dcccce51c\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/seller/product",
+					"raw": "http://localhost:8082/api/v1/seller/product",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -56,7 +56,7 @@
 					"raw": "{\n    \"productId\": \"3e185d36-7a75-4a16-ac61-97cba5e92446\",\n    \"offerId\": \"14bb6a1f-7060-47aa-bd25-6f1007165404\",\n    \"availableInventory\": 50,\n    \"price\": 81000.00,\n    \"sellerId\": \"f5423841-7a8a-4044-a2d3-6f4dcccce51c\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/seller/product",
+					"raw": "http://localhost:8082/api/v1/seller/product",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -131,7 +131,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/seller/products?pageNo=0&pageSize=10",
+					"raw": "http://localhost:8082/api/v1/seller/products?pageNo=0&pageSize=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -183,7 +183,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/products/search?searchQuery=phone",
+					"raw": "http://localhost:8082/api/v1/products/search?searchQuery=phone",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -225,7 +225,7 @@
 					"raw": "{\n    \n    \"orderItems\":[\n        {\n            \"offerId\":\"14bb6a1f-7060-47aa-bd25-6f1007165404\",\n            \"quantity\": 2\n        },\n        {\n            \"offerId\":\"68003706-56cc-4b0a-9c09-553be2a0e6a8\",\n            \"quantity\": 3\n        }\n    ]\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/order",
+					"raw": "http://localhost:8084/api/v1/order",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -256,7 +256,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/order/29677691-3c1d-4698-ae8e-6b355b806c35",
+					"raw": "http://localhost:8084/api/v1/order/29677691-3c1d-4698-ae8e-6b355b806c35",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -288,7 +288,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/orders?buyerId=f31e08c9-a96a-4d47-8a0d-63ffd4c67939",
+					"raw": "http://localhost:8084/api/v1/orders?buyerId=f31e08c9-a96a-4d47-8a0d-63ffd4c67939",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -329,7 +329,7 @@
 					"raw": "{\n    \n    \"orderItemIds\":[\"efdaa916-e142-45c8-84c4-adabeab102fb\"]\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/order/29677691-3c1d-4698-ae8e-6b355b806c35/cancel",
+					"raw": "http://localhost:8084/api/v1/order/29677691-3c1d-4698-ae8e-6b355b806c35/cancel",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -362,7 +362,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/seller/orders",
+					"raw": "http://localhost:8084/api/v1/seller/orders",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -400,7 +400,7 @@
 					"raw": "{\n    \"email\": \"buyer1@sample.com\",\n    \"userName\": \"buyer1\",\n    \"password\": \"pass1234\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/auth/register",
+					"raw": "http://localhost:8084/api/v1/auth/register",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -436,7 +436,7 @@
 					"raw": "{\n    \"userName\": \"seller1\",\n    \"password\": \"pass1234\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/auth/login",
+					"raw": "http://localhost:8084/api/v1/auth/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -468,7 +468,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/seller/product?productId=3e185d36-7a75-4a16-ac61-97cba5e92446",
+					"raw": "http://localhost:8082/api/v1/seller/product?productId=3e185d36-7a75-4a16-ac61-97cba5e92446",
 					"protocol": "http",
 					"host": [
 						"localhost"
